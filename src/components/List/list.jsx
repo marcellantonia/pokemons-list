@@ -13,7 +13,7 @@ function List({ items = [], favorites = [], onItemFavorite, onItemDetailsClick }
 
 	const itemsMap = useMemo(() => {
 		return items.map((pokemon) => {
-			const isFavorite = favorites.includes(pokemon.name);
+			const isFavorite = favorites.find((element) => element.name === pokemon.name);
 			const sprite = pokemon.sprite;
 			return (
 				<div key={pokemon.name} className="list-item" data-testid={`list-item-${pokemon.name}`}>
@@ -27,7 +27,13 @@ function List({ items = [], favorites = [], onItemFavorite, onItemDetailsClick }
 					<div className="list-item-image-wrapper">
 						<img alt={pokemon.name} src={sprite} className="list-item-image" />
 					</div>
-					<button data-testid={`list-item-${pokemon.name}-destails-button`} onClick={() => handleDetailsClick(pokemon)}>{pokemon.name}</button>
+					<button
+						className='list-item-button'
+						data-testid={`list-item-${pokemon.name}-destails-button`}
+						onClick={() => handleDetailsClick(pokemon)}
+						>
+							{pokemon.name}
+						</button>
 				</div>
 			);
 		});

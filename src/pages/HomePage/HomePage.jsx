@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { favoritesActions } from '../../store/favorites';
 import { pokemonsActions } from '../../store/pokemons';
 import { useNavigate } from 'react-router-dom';
+import Header from '../../components/Header/Header';
+import '../../styles/Pages.css';
 
 function HomePage() {
 	const dispatch = useDispatch();
@@ -72,12 +74,12 @@ function HomePage() {
 
 	}, [dispatch, pokemons, getDetails, getTargets]);
 
-	const handleItemFavorite = useCallback((value) => {
-		const targetName = value.name;
-		if (favorites.includes(targetName)) {
-			dispatch(favoritesActions.remove(targetName));
+	const handleItemFavorite = useCallback((target) => {
+		const exists = favorites.find((element) => element.name === target.name);
+		if (exists) {
+			dispatch(favoritesActions.remove(target));
 		} else {
-			dispatch(favoritesActions.add(targetName));
+			dispatch(favoritesActions.add(target));
 		}
 	}, [dispatch, favorites]);
 
@@ -86,15 +88,17 @@ function HomePage() {
 	}, [navigate]);
 
   return (
-    <div>
-      <p>App</p>
-			<List
-				items={pokemons.list}
-				favorites={favorites}
-				onItemFavorite={handleItemFavorite}
-				onItemDetailsClick={handleDetailsClick}
-			/>
-			<button onClick={loadMore}>Carregar mais</button>
+    <div className='page-wrapper'>
+			<Header favorites={favorites} />
+			<div className='page-container'>
+				<List
+					items={pokemons.list}
+					favorites={favorites}
+					onItemFavorite={handleItemFavorite}
+					onItemDetailsClick={handleDetailsClick}
+				/>
+				<button onClick={loadMore}>Carregar mais</button>
+			</div>
     </div>
   );
 }
